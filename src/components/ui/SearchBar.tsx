@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-
 export function SearchBar({
   placeholder = "Search...",
   value,
@@ -19,6 +18,13 @@ export function SearchBar({
         type="text"
         className="bg-transparent outline-none flex-1 text-textPrimary"
         placeholder={placeholder}
+        aria-label={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
         aria-label={placeholder}
         value={value}
         onChange={onChange}
