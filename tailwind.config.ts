@@ -22,18 +22,23 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			// Main theme color - change this to update the entire app's color scheme
-  			primary: "#8b5cf6", // Main brand color
-  			"primary-light": "#a78bfa", // For hover states
-  			"primary-dark": "#7c3aed", // For active states
-  			
-  			// Secondary colors for backgrounds and text
-  			secondary: "#f8fafc", // Light backgrounds
-  			"secondary-dark": "#334155", // Dark backgrounds
-  			
-  			// Legacy CSS variables for backward compatibility
+  			primary: "#8b5cf6",
+  			"primary-light": "#a78bfa",
+  			"primary-dark": "#7c3aed",
+  			secondary: "#f8fafc",
+  			"secondary-dark": "#334155",
   			background: 'var(--background)',
-  			foreground: 'var(--foreground)'
+  			foreground: 'var(--foreground)',
+  			// Added Blink dark palette tokens
+  			bg: "#0F1A24",
+  			card: "#162430",
+  			muted: "#203040",
+  			borderSubtle: "#2A3A4A",
+  			textPrimary: "#E6EEF6",
+  			textSecondary: "#8CA0B3",
+  			accent: "#2E7CF6",
+  			success: "#34D399",
+  			danger: "#F87171",
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
