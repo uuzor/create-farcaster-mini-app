@@ -3,8 +3,12 @@ import React from "react";
 
 export function SearchBar({
   placeholder = "Search...",
+  value,
+  onChange,
 }: {
   placeholder?: string;
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }) {
   return (
     <div className="flex items-center bg-muted rounded-md px-3 py-2 my-4 border border-borderSubtle">
@@ -15,8 +19,16 @@ export function SearchBar({
         type="text"
         className="bg-transparent outline-none flex-1 text-textPrimary"
         placeholder={placeholder}
-        disabled
         aria-label={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+        aria-label={placeholder}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );

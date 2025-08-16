@@ -15,10 +15,12 @@ export type Bet = {
   id: string;
   marketId: string;
   marketTitle?: string;
-  bettorAddress: string;
-  outcome: number;
-  amountWei: string;
-  txHash?: string;
-  // ...other fields
+  userId: string;
+  amount: number;
+  side: 'yes'|'no';
+  status: 'open'|'completed';
+  result?: 'won'|'lost';
+  payout?: number;
+  createdAt: string;
+  notes?: string;
 };
-export type ApiResponse<T> = { data: T; error?: string };

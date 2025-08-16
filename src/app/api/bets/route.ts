@@ -20,22 +20,33 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { marketId, amount, side, notes } = await req.json();
-  if (!marketId || !amount || !side || !["yes", "no"].includes(side)) {
-    return NextResponse.json({ error: "Invalid bet data" }, { status: 400 });
+  let body: { marketId: string; marketTitle?: string; amount: number; side: 'yes'|'no'; notes?: string; };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ message: 'Invalid JSON' }, { status: 400 });
   }
-  const bet: Bet = {
-    id: randomUUID(),
+
+  const { marketId, marketTitle, amount, side, notes } = body;
+  if (!marketId || !amount || !side) {
+    return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+  }
+
+  // Simulate DB insert (replace with your actual db logic)
+  const createdAt = new Date().toISOString();
+  const bet = {
+    id: Math.random().toString(16).slice(2),
     marketId,
-    userId,
-    amount: Number(amount),
+    marketTitle,
+    userId: "user1",
+    amount,
     side,
     status: "open",
-    createdAt: new Date().toISOString(),
+    createdAt,
     notes,
   };
-  let openBets: Bet[] = (await kv.get(getKey("open"))) || [];
-  openBets.unshift(bet);
-  await kv.set(getKey("open"), openBets);
-  return NextResponse.json(bet);
+  // For demo, you might want to write to a real DB or in-memory store
+  // Here we'll just echo the bet back
+  return NextResponse.json(bet, { status: 201 });
+});
 }
