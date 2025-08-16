@@ -14,13 +14,11 @@ export type Channel = {
 export type Bet = {
   id: string;
   marketId: string;
-  userId: string;
-  amount: number;
-  side: "yes" | "no";
-  status: "open" | "completed";
-  result?: "won" | "lost";
-  payout?: number;
-  createdAt: string;
-  notes?: string;
+  marketTitle?: string;
+  bettorAddress: string;
+  outcome: number;
+  amountWei: string;
+  txHash?: string;
+  // ...other fields
 };
 export type ApiResponse<T> = { data: T; error?: string };

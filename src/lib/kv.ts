@@ -1,19 +1,25 @@
 import { MiniAppNotificationDetails } from '@farcaster/miniapp-sdk';
-import { Redis } from '@upstash/redis';
 import { APP_NAME } from './constants';
 
-// In-memory fallback storage
-const localStore = new Map<string, MiniAppNotificationDetails>();
+// Simple KV helper with fallback to in-memory map
+const redis = (global as any).redis || null;
+const localStore = new Map<string, any>();
 
-// Use Redis if KV env vars are present, otherwise use in-memory
-const useRedis = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
-const redis = useRedis
-  ? new Redis({
-      url: process.env.KV_REST_API_URL!,
-      token: process.env.KV_REST_API_TOKEN!,
-    })
-  : null;
+export const kv = {
+  async get<T>(key: string): Promise<T | null> {
+    return redis ? await redis.get<T>(key) : (localStore.get(key) as any) ?? null;
+  },
+  async set(key: string, value: any): Promise<void> {
+    if (redis) await redis.set(key, value);
+    else localStore.set(key, value);
+  },
+  async del(key: string): Promise<void> {
+    if (redis) await redis.del(key);
+    else localStore.delete(key);
+  },
+};
 
+// ---- Notification helpers (keep as is) ----
 function getUserNotificationDetailsKey(fid: number): string {
   return `${APP_NAME}:user:${fid}`;
 }
@@ -22,10 +28,7 @@ export async function getUserNotificationDetails(
   fid: number
 ): Promise<MiniAppNotificationDetails | null> {
   const key = getUserNotificationDetailsKey(fid);
-  if (redis) {
-    return await redis.get<MiniAppNotificationDetails>(key);
-  }
-  return localStore.get(key) || null;
+  return kv.get<MiniAppNotificationDetails>(key);
 }
 
 export async function setUserNotificationDetails(
@@ -33,20 +36,12 @@ export async function setUserNotificationDetails(
   notificationDetails: MiniAppNotificationDetails
 ): Promise<void> {
   const key = getUserNotificationDetailsKey(fid);
-  if (redis) {
-    await redis.set(key, notificationDetails);
-  } else {
-    localStore.set(key, notificationDetails);
-  }
+  return kv.set(key, notificationDetails);
 }
 
 export async function deleteUserNotificationDetails(
   fid: number
 ): Promise<void> {
   const key = getUserNotificationDetailsKey(fid);
-  if (redis) {
-    await redis.del(key);
-  } else {
-    localStore.delete(key);
-  }
+  return kv.del(key);
 }
