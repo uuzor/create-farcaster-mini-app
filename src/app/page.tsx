@@ -1,7 +1,7 @@
 "use client";
-import { MobileShell } from "@/components/ui/MobileShell";
-import { TopBar } from "@/components/ui/TopBar";
-import { PillButton } from "@/components/ui/PillButton";
+import { MobileShell } from "~/components/ui/MobileShell";
+import { TopBar } from "~/components/ui/TopBar";
+import { PillButton } from "~/components/ui/PillButton";
 import Link from "next/link";
 
 export default function HomePage() {
